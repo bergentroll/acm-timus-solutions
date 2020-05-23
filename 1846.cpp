@@ -1,49 +1,30 @@
 #include <cstdio>
 #include <ios>
 #include <unordered_map>
-#include <limits>
-#include <cmath>
 
 using namespace std;
 using uint = unsigned int;
 
-uint findMin(unordered_map<uint, uint> const &collection) {
-  auto min { numeric_limits<uint>::max() };
-  for (auto const &i: collection) {
-    if (i.first < min) min = i.first;
+uint euclid_gcd(uint a, uint b) {
+  uint tmp { };
+  while (b) {
+    tmp = b;
+    b = a % b;
+    a = tmp;
   }
-  return min;
+  return a;
 }
 
-uint SumSqrt(unordered_map<uint, uint> const &collection) {
-  unsigned long long sum { };
-  for (auto const &i: collection) {
-    sum += i.first;
-  }
-  return sqrtl(sum);
-}
-
-bool isDevider(unordered_map<uint, uint> const &collection, uint n) {
-  for (auto const &i: collection) {
-    if (i.first % n) return false;
-  }
-
-  return true;
-}
-
-uint GCD(unordered_map<uint, uint> const &collection) {
+uint process_map(unordered_map<uint, uint> const &collection) {
   if (collection.empty()) return 1;
 
-  auto const min { findMin(collection) };
+  uint gcd { (*(collection.begin())).first };
+  auto end { collection.end() };
+  for (auto it { next(collection.begin()) }; it != end; ++it) {
+    gcd = euclid_gcd(gcd, (*it).first);
+  }
 
-  if (isDevider(collection, min)) return min;
-
-  auto min_sqrt { static_cast<uint>(sqrtl(min)) };
-  //auto sum_sqrt { SumSqrt(collection) };
-
-  for (uint i { min_sqrt }; i > 1; --i) if (isDevider(collection, i)) return i;
-
-  return 1;
+  return gcd;
 }
 
 void insert(unordered_map<uint, uint> &collection, uint num) {
@@ -74,7 +55,7 @@ int main() {
       erase(collection, num);
     }
 
-    printf("%d\n", GCD(collection));
+    printf("%d\n", process_map(collection));
   }
 
   return EXIT_SUCCESS;

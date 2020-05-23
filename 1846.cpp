@@ -16,8 +16,6 @@ uint euclid_gcd(uint a, uint b) {
 }
 
 uint process_map(unordered_map<uint, uint> const &collection) {
-  if (collection.empty()) return 1;
-
   uint gcd { (*(collection.begin())).first };
   auto end { collection.end() };
   for (auto it { next(collection.begin()) }; it != end; ++it) {

@@ -1,68 +1,72 @@
-#include <iostream>
-#include <map>
+#include <cstdio>
+#include <ios>
+#include <unordered_map>
 #include <limits>
 #include <cmath>
 
 using namespace std;
 using uint = unsigned int;
 
-uint findMin(map<uint, uint> const &collection) {
+uint findMin(unordered_map<uint, uint> const &collection) {
   auto min { numeric_limits<uint>::max() };
-  for (auto [i, j]: collection) {
-    if (i < min) min = i;
+  for (auto const &i: collection) {
+    if (i.first < min) min = i.first;
   }
   return min;
 }
 
-bool isDevider(map<uint, uint> const &collection, uint n) {
-  for (auto [i, j]: collection) {
-    if (i % n) return false;
+uint SumSqrt(unordered_map<uint, uint> const &collection) {
+  unsigned long long sum { };
+  for (auto const &i: collection) {
+    sum += i.first;
+  }
+  return sqrtl(sum);
+}
+
+bool isDevider(unordered_map<uint, uint> const &collection, uint n) {
+  for (auto const &i: collection) {
+    if (i.first % n) return false;
   }
 
   return true;
 }
 
-uint GCD(map<uint, uint> const &collection) {
+uint GCD(unordered_map<uint, uint> const &collection) {
   if (collection.empty()) return 1;
 
   auto const min { findMin(collection) };
 
   if (isDevider(collection, min)) return min;
 
-  auto min_sqrt { static_cast<uint>(sqrt(min) + 1) };
+  auto min_sqrt { static_cast<uint>(sqrtl(min)) };
+  //auto sum_sqrt { SumSqrt(collection) };
 
-  for (uint i { min }; i > 1; --i) {
-    if (isDevider(collection, i)) return i;
-  }
+  for (uint i { min_sqrt }; i > 1; --i) if (isDevider(collection, i)) return i;
 
   return 1;
 }
 
-void insert(map<uint, uint> &collection, uint num) {
+void insert(unordered_map<uint, uint> &collection, uint num) {
   if (collection.find(num) != collection.end()) ++collection[num];
   else collection[num] = 1;
 }
 
-void erase(map<uint, uint> &collection, uint num) {
+void erase(unordered_map<uint, uint> &collection, uint num) {
   --collection[num];
   if (!collection[num]) collection.erase(num);
 }
 
-void print(map<uint, uint> collection) {
-  for (auto [i, j]: collection) cerr << i << ": " << j << ", ";
-  cerr << "END" << endl;
-}
-
 int main() {
+  ios::sync_with_stdio (false);
+
   int q;
-  map<uint, uint> collection { };
+  char op;
+  int num;
+  unordered_map<uint, uint> collection { };
 
   scanf("%d\n", &q);
 
   for (int i { }; i < q; ++i) {
-    char op;
-    int num;
-
     scanf("%c %d\n", &op, &num);
     if (op == '+') {
       insert(collection, num);
@@ -70,7 +74,6 @@ int main() {
       erase(collection, num);
     }
 
-    //print(collection);
     printf("%d\n", GCD(collection));
   }
 

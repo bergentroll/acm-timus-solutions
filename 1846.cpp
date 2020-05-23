@@ -61,8 +61,12 @@ int main() {
       }
     } else if (op == '-') {
       erase(collection, num);
-      if (collection.empty()) is_first = true;
-      ghd = process_map(collection);
+      if (collection.empty()) {
+        is_first = true;
+        ghd = 1;
+      } else {
+        ghd = process_map(collection);
+      }
     }
 
     printf("%d\n", ghd);

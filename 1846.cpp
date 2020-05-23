@@ -43,6 +43,8 @@ int main() {
   int q;
   char op;
   int num;
+  uint ghd;
+  bool is_first { true };
   unordered_map<uint, uint> collection { };
 
   scanf("%d\n", &q);
@@ -51,11 +53,19 @@ int main() {
     scanf("%c %d\n", &op, &num);
     if (op == '+') {
       insert(collection, num);
+      if (is_first) {
+        ghd = num;
+        is_first = false;
+      } else {
+        ghd = euclid_gcd(ghd, num);
+      }
     } else if (op == '-') {
       erase(collection, num);
+      if (collection.empty()) is_first = true;
+      ghd = process_map(collection);
     }
 
-    printf("%d\n", process_map(collection));
+    printf("%d\n", ghd);
   }
 
   return EXIT_SUCCESS;

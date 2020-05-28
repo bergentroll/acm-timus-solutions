@@ -5,17 +5,6 @@
 
 using namespace std;
 
-void print_map(vector<unsigned> const &hor, vector<unsigned> const &vert) {
-  cout << "   ";
-  for (auto i: vert) cout << i << "  ";
-  cout << endl;
-  for (auto i: hor) {
-    cout << i << "  ";
-    for (auto i: vert) cout << '+' << "  ";
-    cout << endl;
-  }
-}
-
 class Solver {
   public:
   Solver(vector<unsigned> const &vert, vector<unsigned> const &hor):
@@ -25,11 +14,12 @@ class Solver {
   target_y(hor.size() - 1) { }
 
   void traverse(unsigned x, unsigned y, unsigned min_val) {
-    //cout << "TRAV: " << x << ", " << y << ", " << min_val << endl;
     if (x == target_x && y == target_y) {
-      //cout << "SUCKCESS: " << min_val << endl;
       result = max(result, min_val);
+      return;
     }
+
+    if (min_val <= result) return;
 
     if (x < target_x) {
       traverse(x + 1, y, min(min_val, hor[y]));
@@ -66,8 +56,6 @@ int main() {
   Solver s { vert, hor };
 
   s.traverse(0, 0, numeric_limits<unsigned>::max());
-
-  //print_map(hor, vert);
 
   cout << s.getResult();
 

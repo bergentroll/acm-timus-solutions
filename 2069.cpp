@@ -1,32 +1,39 @@
-#include <algorithm>
-#include <iostream>
-#include <vector>
-#include <limits>
+#include <cstdio>
 
-using namespace std;
+unsigned min(unsigned a, unsigned b) {
+  return a < b? a: b;
+}
+
+unsigned max(unsigned a, unsigned b) {
+  return a < b? b: a;
+}
 
 int main() {
-  unsigned n, m;
-  cin >> n >> m;
+  unsigned n, m, buf, max_vert, max_hor, first_vert, last_vert, first_hor, last_hor;
 
-  vector<unsigned> hor { }, vert { };
+  scanf("%u %u\n", &n, &m);
 
-  unsigned buf;
   for (unsigned i { }; i < n; ++i) {
-    cin >> buf;
-    vert.push_back(buf);
+    scanf("%u\n", &buf);
+    if (i == 0) {
+      max_vert = buf;
+      first_vert = buf;
+    }
+    max_vert = max(max_vert, buf);
   }
+  last_vert = buf;
+
   for (unsigned i { }; i < m; ++i) {
-    cin >> buf;
-    hor.push_back(buf);
+    scanf("%u\n", &buf);
+    if (i == 0) {
+      max_hor = buf;
+      first_hor = buf;
+    }
+    max_hor = max(max_hor, buf);
   }
+  last_hor = buf;
 
-  unsigned var1 { max(min(vert.front(), hor.back()), min(vert.back(), hor.front())) };
-  unsigned var2 { max(
-    min(min(vert.front(), vert.back()), *max_element(next(hor.begin()), prev(hor.end()))),
-    min(min(hor.front(), hor.back()), *max_element(next(vert.begin()), prev(vert.end())))) };
+  printf("%u", max(max(min(first_vert, last_hor), min(last_vert, first_hor)), max(min(min(first_vert, last_vert), max_hor), min(min(first_hor, last_hor), max_vert))));
 
-  cout << max(var1, var2);
-
-  return EXIT_SUCCESS;
+  return 0;
 }

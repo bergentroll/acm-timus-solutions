@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <map>
 
 using namespace std;
@@ -21,7 +20,9 @@ int main() {
     total_amount { },
     cast_num { };
 
-  for (auto it { a.cbegin() }; it != a.cend(); ++it) {
+  auto end { a.cend() };
+
+  for (auto it { a.cbegin() }; it != end; ++it) {
     unsigned power { (acc + it->second) * it->first};
 
     if (power > p) {

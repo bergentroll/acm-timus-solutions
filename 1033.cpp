@@ -15,7 +15,7 @@ void print(Map const &map) {
   cerr << endl;
 }
 
-void traverse(Map const &map, Map &visited, int x, int y) {
+void traverse(Map const &map, Map &visited, int x, int y, size_t &walls) {
   visited[x][y] = true;
 
   auto max_index { map.size() };
@@ -25,11 +25,18 @@ void traverse(Map const &map, Map &visited, int x, int y) {
       if ((i == 0 && j == 0) || (i != 0 && j != 0)) continue;
       auto new_x { x + i };
       auto new_y { y + j };
-      if (new_x < max_index && new_x > -1 && new_y < max_index && new_y > -1 && !visited[new_x][new_y]) {
-        if (!map[new_x][new_y]) {
-          cout << '[' << x << ':' << y << ']' << endl;
-          traverse(map, visited, new_x, new_y);
-        }
+      if (
+          new_x < max_index &&
+          new_x > -1 &&
+          new_y < max_index &&
+          new_y > -1 &&
+          !map[new_x][new_y]) {
+            if (!visited[new_x][new_y]) {
+              traverse(map, visited, new_x, new_y, walls);
+            }
+      }
+      else {
+        ++walls;
       }
     }
   }
@@ -58,7 +65,7 @@ int main() {
     map.push_back(line);
   }
 
-  print(map);
+  //print(map);
 
   size_t walls { };
 
@@ -70,10 +77,12 @@ int main() {
     visited.push_back(line);
   }
 
-  traverse(map, visited, 0, 0);
-  print(visited);
+  traverse(map, visited, 0, 0, walls);
+  //print(visited);
+  if (!visited[N -1][N - 1]) traverse(map, visited, N - 1, N - 1, walls);
+  //print(visited);
 
-  cout << walls * 3;
+  cout << (walls - 4) * 9;
 
   return EXIT_SUCCESS;
 }

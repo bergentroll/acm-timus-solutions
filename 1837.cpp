@@ -31,7 +31,7 @@ int main() {
   int level { };
   vector<string> result { }; result.reserve(relations.size());
 
-  targets.push(make_pair(root, 0));
+  if (relations.count(root)) targets.push(make_pair(root, 0));
 
   while (!targets.empty()) {
     auto target { targets.front() }; targets.pop();
